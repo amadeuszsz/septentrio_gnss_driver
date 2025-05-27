@@ -49,12 +49,12 @@ namespace custom_diagnostic_tasks {
             if (!settings_->publish_diagnostics)
                 return;
 
+            static constexpr double nominal_freq = 5.0;
             diagnostics_updater_ =
                 std::make_unique<diagnostic_updater::Updater>(node);
-            diagnostics_updater_->setPeriod(1.0 / 10.0);
+            diagnostics_updater_->setPeriod(1.0 / nominal_freq);
             diagnostics_updater_->setHardwareID(settings_->frame_id);
 
-            static constexpr double nominal_freq = 10.0;
             auto ok_min_freq = settings_->diagnostics_ok_min * nominal_freq;
             auto ok_max_freq = settings_->diagnostics_ok_max * nominal_freq;
             auto warn_min_freq = settings_->diagnostics_warn_min * nominal_freq;

@@ -123,3 +123,39 @@ publish:
 # logger
 
 activate_debug_log: false
+
+# topic rate diagnostics
+diagnostics:
+  rate_bound_status:
+    relative_frequency_ok:
+      min: 0.95
+      max: 1.05
+    relative_frequency_warn:
+      min: 0.9
+      max: 1.1
+  monitor_topics:
+    # For both GNSS and INS Rxs
+    navsatfix: true
+    gpsfix: true
+    gpgga: true
+    gprmc: true
+    gpst: true
+    measepoch: true
+    pvtcartesian: true
+    pvtgeodetic: true
+    basevectorcart: false
+    basevectorgeod: false
+    poscovcartesian: true
+    poscovgeodetic: true
+    velcovcartesian: false
+    velcovgeodetic: true
+    atteuler: true
+    attcoveuler: true
+    pose: true
+    twist: false
+    diagnostics: true
+    aimplusstatus: true
+    galauthstatus: false
+    # For GNSS Rx only
+    gpgsa: false
+    gpgsv: false

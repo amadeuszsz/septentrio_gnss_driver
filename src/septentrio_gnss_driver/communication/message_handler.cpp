@@ -2125,6 +2125,7 @@ namespace io {
                 wait(timestampFromRos(msg.header.stamp));
             }
             node_->publishMessage<M>(topic, msg);
+            tick_relay_->tick(topic);
         } else
         {
             node_->log(

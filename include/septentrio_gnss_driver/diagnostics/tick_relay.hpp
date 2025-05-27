@@ -41,100 +41,213 @@
 #include <unordered_map>
 
 namespace custom_diagnostic_tasks {
+    struct DiagnosticSettings
+    {
+        std::string hardware_id;
+        double ok_min_freq;
+        double ok_max_freq;
+        double warn_min_freq;
+        double warn_max_freq;
+        bool monitor_gpst;
+        bool monitor_navsatfix;
+        bool monitor_gpsfix;
+        bool monitor_pose;
+        bool monitor_aimplusstatus;
+        bool monitor_galauthstatus;
+        bool monitor_gpgga;
+        bool monitor_gprmc;
+        bool monitor_gpgsa;
+        bool monitor_gpgsv;
+        bool monitor_measepoch;
+        bool monitor_pvtcartesian;
+        bool monitor_pvtgeodetic;
+        bool monitor_basevectorcart;
+        bool monitor_basevectorgeod;
+        bool monitor_poscovcartesian;
+        bool monitor_poscovgeodetic;
+        bool monitor_velcovgeodetic;
+        bool monitor_atteuler;
+        bool monitor_attcoveuler;
+        bool monitor_insnavcart;
+        bool monitor_insnavgeod;
+        bool monitor_imusetup;
+        bool monitor_velsensorsetup;
+        bool monitor_exteventinsnavgeod;
+        bool monitor_exteventinsnavcart;
+        bool monitor_extsensormeas;
+        bool monitor_imu;
+        bool monitor_localization;
+        bool monitor_localization_ecef;
+        bool monitor_twist;
+    };
+
     class TickRelay
     {
     public:
         TickRelay(ROSaicNodeBase* node) : node_(node), settings_(node->settings())
         {
-            if (!settings_->publish_diagnostics)
-                return;
+            DiagnosticSettings diagnostic_settings{};
+            diagnostic_settings.hardware_id = node_->declare_parameter<std::string>(
+                "diagnostics.hardware_id", "gnss");
+            diagnostic_settings.ok_min_freq = node_->declare_parameter<double>(
+                "diagnostics.rate_bound_status.relative_frequency_ok.min", 0.95);
+            diagnostic_settings.ok_max_freq = node_->declare_parameter<double>(
+                "diagnostics.rate_bound_status.relative_frequency_ok.max", 1.05);
+            diagnostic_settings.warn_min_freq = node_->declare_parameter<double>(
+                "diagnostics.rate_bound_status.relative_frequency_warn.min", 0.9);
+            diagnostic_settings.warn_max_freq = node_->declare_parameter<double>(
+                "diagnostics.rate_bound_status.relative_frequency_warn.max", 1.1);
+            diagnostic_settings.monitor_gpst =
+                node_->declare_parameter<bool>("diagnostics.monitor_gpst", false);
+            diagnostic_settings.monitor_navsatfix = node_->declare_parameter<bool>(
+                "diagnostics.monitor_navsatfix", false);
+            diagnostic_settings.monitor_gpsfix =
+                node_->declare_parameter<bool>("diagnostics.monitor_gpsfix", false);
+            diagnostic_settings.monitor_pose =
+                node_->declare_parameter<bool>("diagnostics.monitor_pose", false);
+            diagnostic_settings.monitor_aimplusstatus =
+                node_->declare_parameter<bool>("diagnostics.monitor_aimplusstatus",
+                                               false);
+            diagnostic_settings.monitor_galauthstatus =
+                node_->declare_parameter<bool>("diagnostics.monitor_galauthstatus",
+                                               false);
+            diagnostic_settings.monitor_gpgga =
+                node_->declare_parameter<bool>("diagnostics.monitor_gpgga", false);
+            diagnostic_settings.monitor_gprmc =
+                node_->declare_parameter<bool>("diagnostics.monitor_gprmc", false);
+            diagnostic_settings.monitor_gpgsa =
+                node_->declare_parameter<bool>("diagnostics.monitor_gpgsa", false);
+            diagnostic_settings.monitor_gpgsv =
+                node_->declare_parameter<bool>("diagnostics.monitor_gpgsv", false);
+            diagnostic_settings.monitor_measepoch = node_->declare_parameter<bool>(
+                "diagnostics.monitor_measepoch", false);
+            diagnostic_settings.monitor_pvtcartesian =
+                node_->declare_parameter<bool>("diagnostics.monitor_pvtcartesian",
+                                               false);
+            diagnostic_settings.monitor_pvtgeodetic = node_->declare_parameter<bool>(
+                "diagnostics.monitor_pvtgeodetic", false);
+            diagnostic_settings.monitor_basevectorcart =
+                node_->declare_parameter<bool>("diagnostics.monitor_basevectorcart",
+                                               false);
+            diagnostic_settings.monitor_basevectorgeod =
+                node_->declare_parameter<bool>("diagnostics.monitor_basevectorgeod",
+                                               false);
+            diagnostic_settings.monitor_poscovcartesian =
+                node_->declare_parameter<bool>("diagnostics.monitor_poscovcartesian",
+                                               false);
+            diagnostic_settings.monitor_poscovgeodetic =
+                node_->declare_parameter<bool>("diagnostics.monitor_poscovgeodetic",
+                                               false);
+            diagnostic_settings.monitor_velcovgeodetic =
+                node_->declare_parameter<bool>("diagnostics.monitor_velcovgeodetic",
+                                               false);
+            diagnostic_settings.monitor_atteuler = node_->declare_parameter<bool>(
+                "diagnostics.monitor_atteuler", false);
+            diagnostic_settings.monitor_attcoveuler = node_->declare_parameter<bool>(
+                "diagnostics.monitor_attcoveuler", false);
+            diagnostic_settings.monitor_insnavcart = node_->declare_parameter<bool>(
+                "diagnostics.monitor_insnavcart", false);
+            diagnostic_settings.monitor_insnavgeod = node_->declare_parameter<bool>(
+                "diagnostics.monitor_insnavgeod", false);
+            diagnostic_settings.monitor_imusetup = node_->declare_parameter<bool>(
+                "diagnostics.monitor_imusetup", false);
+            diagnostic_settings.monitor_velsensorsetup =
+                node_->declare_parameter<bool>("diagnostics.monitor_velsensorsetup",
+                                               false);
+            diagnostic_settings.monitor_exteventinsnavgeod =
+                node_->declare_parameter<bool>(
+                    "diagnostics.monitor_exteventinsnavgeod", false);
+            diagnostic_settings.monitor_exteventinsnavcart =
+                node_->declare_parameter<bool>(
+                    "diagnostics.monitor_exteventinsnavcart", false);
+            diagnostic_settings.monitor_extsensormeas =
+                node_->declare_parameter<bool>("diagnostics.monitor_extsensormeas",
+                                               false);
+            diagnostic_settings.monitor_imu =
+                node_->declare_parameter<bool>("diagnostics.monitor_imu", false);
+            diagnostic_settings.monitor_localization =
+                node_->declare_parameter<bool>("diagnostics.monitor_localization",
+                                               false);
+            diagnostic_settings.monitor_localization_ecef =
+                node_->declare_parameter<bool>(
+                    "diagnostics.monitor_localization_ecef", false);
+            diagnostic_settings.monitor_twist =
+                node_->declare_parameter<bool>("diagnostics.monitor_twist", false);
 
             static constexpr double nominal_freq = 5.0;
             diagnostics_updater_ =
                 std::make_unique<diagnostic_updater::Updater>(node);
             diagnostics_updater_->setPeriod(1.0 / nominal_freq);
-            diagnostics_updater_->setHardwareID(settings_->frame_id);
+            diagnostics_updater_->setHardwareID(diagnostic_settings.hardware_id);
 
-            auto ok_min_freq = settings_->diagnostics_ok_min * nominal_freq;
-            auto ok_max_freq = settings_->diagnostics_ok_max * nominal_freq;
-            auto warn_min_freq = settings_->diagnostics_warn_min * nominal_freq;
-            auto warn_max_freq = settings_->diagnostics_warn_max * nominal_freq;
+            auto ok_min_freq = diagnostic_settings.ok_min_freq * nominal_freq;
+            auto ok_max_freq = diagnostic_settings.ok_max_freq * nominal_freq;
+            auto warn_min_freq = diagnostic_settings.warn_min_freq * nominal_freq;
+            auto warn_max_freq = diagnostic_settings.warn_max_freq * nominal_freq;
             auto ok_params = RateBoundStatusParam{ok_min_freq, ok_max_freq};
             auto warn_params = RateBoundStatusParam{warn_min_freq, warn_max_freq};
 
-            if (settings_->publish_gpst && settings_->monitor_gpst)
+            if (diagnostic_settings.monitor_gpst)
                 update_map("gpst", ok_params, warn_params);
-            if (settings_->publish_navsatfix && settings_->monitor_navsatfix)
+            if (diagnostic_settings.monitor_navsatfix)
                 update_map("navsatfix", ok_params, warn_params);
-            if (settings_->publish_gpsfix && settings_->monitor_gpsfix)
+            if (diagnostic_settings.monitor_gpsfix)
                 update_map("gpsfix", ok_params, warn_params);
-            if (settings_->publish_pose && settings_->monitor_pose)
+            if (diagnostic_settings.monitor_pose)
                 update_map("pose", ok_params, warn_params);
-            if (settings_->publish_aimplusstatus && settings_->monitor_aimplusstatus)
+            if (diagnostic_settings.monitor_aimplusstatus)
                 update_map("aimplusstatus", ok_params, warn_params);
-            if (settings_->publish_galauthstatus && settings_->monitor_galauthstatus)
+            if (diagnostic_settings.monitor_galauthstatus)
                 update_map("galauthstatus", ok_params, warn_params);
-            if (settings_->publish_gpgga && settings_->monitor_gpgga)
+            if (diagnostic_settings.monitor_gpgga)
                 update_map("gpgga", ok_params, warn_params);
-            if (settings_->publish_gprmc && settings_->monitor_gprmc)
+            if (diagnostic_settings.monitor_gprmc)
                 update_map("gprmc", ok_params, warn_params);
-            if (settings_->publish_gpgsa && settings_->monitor_gpgsa)
+            if (diagnostic_settings.monitor_gpgsa)
                 update_map("gpgsa", ok_params, warn_params);
-            if (settings_->publish_gpgsv && settings_->monitor_gpgsv)
+            if (diagnostic_settings.monitor_gpgsv)
                 update_map("gpgsv", ok_params, warn_params);
-            if (settings_->publish_measepoch && settings_->monitor_measepoch)
+            if (diagnostic_settings.monitor_measepoch)
                 update_map("measepoch", ok_params, warn_params);
-            if (settings_->publish_pvtcartesian && settings_->monitor_pvtcartesian)
+            if (diagnostic_settings.monitor_pvtcartesian)
                 update_map("pvtcartesian", ok_params, warn_params);
-            if (settings_->publish_pvtgeodetic && settings_->monitor_pvtgeodetic)
+            if (diagnostic_settings.monitor_pvtgeodetic)
                 update_map("pvtgeodetic", ok_params, warn_params);
-            if (settings_->publish_basevectorcart &&
-                settings_->monitor_basevectorcart)
+            if (diagnostic_settings.monitor_basevectorcart)
                 update_map("basevectorcart", ok_params, warn_params);
-            if (settings_->publish_basevectorgeod &&
-                settings_->monitor_basevectorgeod)
+            if (diagnostic_settings.monitor_basevectorgeod)
                 update_map("basevectorgeod", ok_params, warn_params);
-            if (settings_->publish_poscovcartesian &&
-                settings_->monitor_poscovcartesian)
+            if (diagnostic_settings.monitor_poscovcartesian)
                 update_map("poscovcartesian", ok_params, warn_params);
-            if (settings_->publish_poscovgeodetic &&
-                settings_->monitor_poscovgeodetic)
+            if (diagnostic_settings.monitor_poscovgeodetic)
                 update_map("poscovgeodetic", ok_params, warn_params);
-            if (settings_->publish_velcovcartesian &&
-                settings_->monitor_velcovcartesian)
-                update_map("velcovcartesian", ok_params, warn_params);
-            if (settings_->publish_velcovgeodetic &&
-                settings_->monitor_velcovgeodetic)
+            if (diagnostic_settings.monitor_velcovgeodetic)
                 update_map("velcovgeodetic", ok_params, warn_params);
-            if (settings_->publish_atteuler && settings_->monitor_atteuler)
+            if (diagnostic_settings.monitor_atteuler)
                 update_map("atteuler", ok_params, warn_params);
-            if (settings_->publish_attcoveuler && settings_->monitor_attcoveuler)
+            if (diagnostic_settings.monitor_attcoveuler)
                 update_map("attcoveuler", ok_params, warn_params);
-            if (settings_->publish_insnavcart && settings_->monitor_insnavcart)
+            if (diagnostic_settings.monitor_insnavcart)
                 update_map("insnavcart", ok_params, warn_params);
-            if (settings_->publish_insnavgeod && settings_->monitor_insnavgeod)
+            if (diagnostic_settings.monitor_insnavgeod)
                 update_map("insnavgeod", ok_params, warn_params);
-            if (settings_->publish_imusetup && settings_->monitor_imusetup)
+            if (diagnostic_settings.monitor_imusetup)
                 update_map("imusetup", ok_params, warn_params);
-            if (settings_->publish_velsensorsetup &&
-                settings_->monitor_velsensorsetup)
+            if (diagnostic_settings.monitor_velsensorsetup)
                 update_map("velsensorsetup", ok_params, warn_params);
-            if (settings_->publish_exteventinsnavgeod &&
-                settings_->monitor_exteventinsnavgeod)
+            if (diagnostic_settings.monitor_exteventinsnavgeod)
                 update_map("exteventinsnavgeod", ok_params, warn_params);
-            if (settings_->publish_exteventinsnavcart &&
-                settings_->monitor_exteventinsnavcart)
+            if (diagnostic_settings.monitor_exteventinsnavcart)
                 update_map("exteventinsnavcart", ok_params, warn_params);
-            if (settings_->publish_extsensormeas && settings_->monitor_extsensormeas)
+            if (diagnostic_settings.monitor_extsensormeas)
                 update_map("extsensormeas", ok_params, warn_params);
-            if (settings_->publish_imu && settings_->monitor_imu)
+            if (diagnostic_settings.monitor_imu)
                 update_map("imu", ok_params, warn_params);
-            if (settings_->publish_localization && settings_->monitor_localization)
+            if (diagnostic_settings.monitor_localization)
                 update_map("localization", ok_params, warn_params);
-            if (settings_->publish_localization_ecef &&
-                settings_->monitor_localization_ecef)
+            if (diagnostic_settings.monitor_localization_ecef)
                 update_map("localization_ecef", ok_params, warn_params);
-            if (settings_->publish_twist && settings_->monitor_twist)
+            if (diagnostic_settings.monitor_twist)
                 update_map("twist", ok_params, warn_params);
 
             diagnostics_updater_->force_update();

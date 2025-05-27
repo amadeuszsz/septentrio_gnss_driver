@@ -98,81 +98,81 @@ namespace custom_diagnostic_tasks {
             diagnostic_settings.warn_max_freq = node_->declare_parameter<double>(
                 "diagnostics.rate_bound_status.relative_frequency_warn.max", 1.1);
             diagnostic_settings.monitor_gpst =
-                node_->declare_parameter<bool>("diagnostics.monitor_gpst", false);
+                node_->declare_parameter<bool>("diagnostics.monitor.gpst", false);
             diagnostic_settings.monitor_navsatfix = node_->declare_parameter<bool>(
-                "diagnostics.monitor_navsatfix", false);
+                "diagnostics.monitor.navsatfix", false);
             diagnostic_settings.monitor_gpsfix =
-                node_->declare_parameter<bool>("diagnostics.monitor_gpsfix", false);
+                node_->declare_parameter<bool>("diagnostics.monitor.gpsfix", false);
             diagnostic_settings.monitor_pose =
-                node_->declare_parameter<bool>("diagnostics.monitor_pose", false);
+                node_->declare_parameter<bool>("diagnostics.monitor.pose", false);
             diagnostic_settings.monitor_aimplusstatus =
-                node_->declare_parameter<bool>("diagnostics.monitor_aimplusstatus",
+                node_->declare_parameter<bool>("diagnostics.monitor.aimplusstatus",
                                                false);
             diagnostic_settings.monitor_galauthstatus =
-                node_->declare_parameter<bool>("diagnostics.monitor_galauthstatus",
+                node_->declare_parameter<bool>("diagnostics.monitor.galauthstatus",
                                                false);
             diagnostic_settings.monitor_gpgga =
-                node_->declare_parameter<bool>("diagnostics.monitor_gpgga", false);
+                node_->declare_parameter<bool>("diagnostics.monitor.gpgga", false);
             diagnostic_settings.monitor_gprmc =
-                node_->declare_parameter<bool>("diagnostics.monitor_gprmc", false);
+                node_->declare_parameter<bool>("diagnostics.monitor.gprmc", false);
             diagnostic_settings.monitor_gpgsa =
-                node_->declare_parameter<bool>("diagnostics.monitor_gpgsa", false);
+                node_->declare_parameter<bool>("diagnostics.monitor.gpgsa", false);
             diagnostic_settings.monitor_gpgsv =
-                node_->declare_parameter<bool>("diagnostics.monitor_gpgsv", false);
+                node_->declare_parameter<bool>("diagnostics.monitor.gpgsv", false);
             diagnostic_settings.monitor_measepoch = node_->declare_parameter<bool>(
-                "diagnostics.monitor_measepoch", false);
+                "diagnostics.monitor.measepoch", false);
             diagnostic_settings.monitor_pvtcartesian =
-                node_->declare_parameter<bool>("diagnostics.monitor_pvtcartesian",
+                node_->declare_parameter<bool>("diagnostics.monitor.pvtcartesian",
                                                false);
             diagnostic_settings.monitor_pvtgeodetic = node_->declare_parameter<bool>(
-                "diagnostics.monitor_pvtgeodetic", false);
+                "diagnostics.monitor.pvtgeodetic", false);
             diagnostic_settings.monitor_basevectorcart =
-                node_->declare_parameter<bool>("diagnostics.monitor_basevectorcart",
+                node_->declare_parameter<bool>("diagnostics.monitor.basevectorcart",
                                                false);
             diagnostic_settings.monitor_basevectorgeod =
-                node_->declare_parameter<bool>("diagnostics.monitor_basevectorgeod",
+                node_->declare_parameter<bool>("diagnostics.monitor.basevectorgeod",
                                                false);
             diagnostic_settings.monitor_poscovcartesian =
-                node_->declare_parameter<bool>("diagnostics.monitor_poscovcartesian",
+                node_->declare_parameter<bool>("diagnostics.monitor.poscovcartesian",
                                                false);
             diagnostic_settings.monitor_poscovgeodetic =
-                node_->declare_parameter<bool>("diagnostics.monitor_poscovgeodetic",
+                node_->declare_parameter<bool>("diagnostics.monitor.poscovgeodetic",
                                                false);
             diagnostic_settings.monitor_velcovgeodetic =
-                node_->declare_parameter<bool>("diagnostics.monitor_velcovgeodetic",
+                node_->declare_parameter<bool>("diagnostics.monitor.velcovgeodetic",
                                                false);
             diagnostic_settings.monitor_atteuler = node_->declare_parameter<bool>(
-                "diagnostics.monitor_atteuler", false);
+                "diagnostics.monitor.atteuler", false);
             diagnostic_settings.monitor_attcoveuler = node_->declare_parameter<bool>(
-                "diagnostics.monitor_attcoveuler", false);
+                "diagnostics.monitor.attcoveuler", false);
             diagnostic_settings.monitor_insnavcart = node_->declare_parameter<bool>(
-                "diagnostics.monitor_insnavcart", false);
+                "diagnostics.monitor.insnavcart", false);
             diagnostic_settings.monitor_insnavgeod = node_->declare_parameter<bool>(
-                "diagnostics.monitor_insnavgeod", false);
+                "diagnostics.monitor.insnavgeod", false);
             diagnostic_settings.monitor_imusetup = node_->declare_parameter<bool>(
                 "diagnostics.monitor_imusetup", false);
             diagnostic_settings.monitor_velsensorsetup =
-                node_->declare_parameter<bool>("diagnostics.monitor_velsensorsetup",
+                node_->declare_parameter<bool>("diagnostics.monitor.velsensorsetup",
                                                false);
             diagnostic_settings.monitor_exteventinsnavgeod =
                 node_->declare_parameter<bool>(
-                    "diagnostics.monitor_exteventinsnavgeod", false);
+                    "diagnostics.monitor.exteventinsnavgeod", false);
             diagnostic_settings.monitor_exteventinsnavcart =
                 node_->declare_parameter<bool>(
-                    "diagnostics.monitor_exteventinsnavcart", false);
+                    "diagnostics.monitor.exteventinsnavcart", false);
             diagnostic_settings.monitor_extsensormeas =
-                node_->declare_parameter<bool>("diagnostics.monitor_extsensormeas",
+                node_->declare_parameter<bool>("diagnostics.monitor.extsensormeas",
                                                false);
             diagnostic_settings.monitor_imu =
-                node_->declare_parameter<bool>("diagnostics.monitor_imu", false);
+                node_->declare_parameter<bool>("diagnostics.monitor.imu", false);
             diagnostic_settings.monitor_localization =
-                node_->declare_parameter<bool>("diagnostics.monitor_localization",
+                node_->declare_parameter<bool>("diagnostics.monitor.localization",
                                                false);
             diagnostic_settings.monitor_localization_ecef =
                 node_->declare_parameter<bool>(
-                    "diagnostics.monitor_localization_ecef", false);
+                    "diagnostics.monitor.localization_ecef", false);
             diagnostic_settings.monitor_twist =
-                node_->declare_parameter<bool>("diagnostics.monitor_twist", false);
+                node_->declare_parameter<bool>("diagnostics.monitor.twist", false);
 
             static constexpr double nominal_freq = 5.0;
             diagnostics_updater_ =

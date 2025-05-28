@@ -332,14 +332,22 @@ struct Settings
     bool publish_tf;
     //! Whether or not to publish the tf of the localization
     bool publish_tf_ecef;
-    //! Minimum value for the ok rate bound status
-    double diagnostics_ok_min;
-    //! Maximum value for the ok rate bound status
-    double diagnostics_ok_max;
-    //! Minimum value for the warn rate bound status
-    double diagnostics_warn_min;
-    //! Maximum value for the warn rate bound status
-    double diagnostics_warn_max;
+    //! Minimum frequency the ok rate bound status for pvt
+    double monitor_pvt_frequency_ok_min;
+    //! Maximum frequency the ok rate bound status for pvt
+    double monitor_pvt_frequency_ok_max;
+    //! Minimum frequency the warn rate bound status for pvt
+    double monitor_pvt_frequency_warn_min;
+    //! Maximum frequency the warn rate bound status for pvt
+    double monitor_pvt_frequency_warn_max;
+    //! Minimum frequency the ok rate bound status for rest
+    double monitor_rest_frequency_ok_min;
+    //! Maximum frequency the ok rate bound status for rest
+    double monitor_rest_frequency_ok_max;
+    //! Minimum frequency the warn rate bound status for rest
+    double monitor_rest_frequency_warn_min;
+    //! Maximum frequency the warn rate bound status for rest
+    double monitor_rest_frequency_warn_max;
     //! Whether or not to monitor topic rate of the GGA message
     bool monitor_gpgga;
     //! Whether or not to monitor topic rate of the RMC message

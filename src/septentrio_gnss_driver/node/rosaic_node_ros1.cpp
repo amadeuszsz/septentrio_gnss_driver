@@ -217,6 +217,51 @@ namespace rosaic_node {
         param("publish/tf", settings_.publish_tf, false);
         param("publish/tf_ecef", settings_.publish_tf_ecef, false);
 
+        // Diagnostics parameters
+        param("diagnostics/rate_bound_status/pvt/frequency_ok/min_hz", settings_.monitor_pvt_frequency_ok_min, 0.0);
+        param("diagnostics/rate_bound_status/pvt/frequency_ok/max_hz", settings_.monitor_pvt_frequency_ok_max, 0.0);
+        param("diagnostics/rate_bound_status/pvt/frequency_warn/min_hz", settings_.monitor_pvt_frequency_warn_min, 0.0);
+        param("diagnostics/rate_bound_status/pvt/frequency_warn/max_hz", settings_.monitor_pvt_frequency_warn_max, 0.0);
+        param("diagnostics/rate_bound_status/rest/frequency_ok/min_hz", settings_.monitor_rest_frequency_ok_min, 0.0);
+        param("diagnostics/rate_bound_status/rest/frequency_ok/max_hz", settings_.monitor_rest_frequency_ok_max, 0.0);
+        param("diagnostics/rate_bound_status/rest/frequency_warn/min_hz", settings_.monitor_rest_frequency_warn_min, 0.0);
+        param("diagnostics/rate_bound_status/rest/frequency_warn/max_hz", settings_.monitor_rest_frequency_warn_max, 0.0);
+        param("diagnostics/monitor/gpst", settings_.diagnostics_gpst, false);
+        param("diagnostics/monitor/navsatfix", settings_.diagnostics_navsatfix, false);
+        param("diagnostics/monitor/gpsfix", settings_.diagnostics_gpsfix, false);
+        param("diagnostics/monitor/pose", settings_.diagnostics_pose, false);
+        param("diagnostics/monitor/aimplusstatus", settings_.diagnostics_aimplusstatus, false);
+        param("diagnostics/monitor/galauthstatus", settings_.diagnostics_galauthstatus, false);
+        param("diagnostics/monitor/gpgga", settings_.diagnostics_gpgga, false);
+        param("diagnostics/monitor/gprmc", settings_.diagnostics_gprmc, false);
+        param("diagnostics/monitor/gpgsa", settings_.diagnostics_gpgsa, false);
+        param("diagnostics/monitor/gpgsv", settings_.diagnostics_gpgsv, false);
+        param("diagnostics/monitor/measepoch", settings_.diagnostics_measepoch, false);
+        param("diagnostics/monitor/pvtcartesian", settings_.diagnostics_pvtcartesian, false);
+        param("diagnostics/monitor/pvtgeodetic", settings_.diagnostics_pvtgeodetic, false);
+        param("diagnostics/monitor/basevectorcart", settings_.diagnostics_basevectorcart, false);
+        param("diagnostics/monitor/basevectorgeod", settings_.diagnostics_basevectorgeod, false);
+        param("diagnostics/monitor/poscovcartesian", settings_.diagnostics_poscovcartesian, false);
+        param("diagnostics/monitor/poscovgeodetic", settings_.diagnostics_poscovgeodetic, false);
+        param("diagnostics/monitor/velcovcartesian", settings_.diagnostics_velcovcartesian, false);
+        param("diagnostics/monitor/velcovgeodetic", settings_.diagnostics_velcovgeodetic, false);
+        param("diagnostics/monitor/atteuler", settings_.diagnostics_atteuler, false);
+        param("diagnostics/monitor/attcoveuler", settings_.diagnostics_attcoveuler, false);
+        param("diagnostics/monitor/insnavcart", settings_.diagnostics_insnavcart, false);
+        param("diagnostics/monitor/insnavgeod", settings_.diagnostics_insnavgeod, false);
+        param("diagnostics/monitor/imusetup", settings_.diagnostics_imusetup, false);
+        param("diagnostics/monitor/velsensorsetup", settings_.diagnostics_velsensorsetup, false);
+        param("diagnostics/monitor/exteventinsnavgeod", settings_.diagnostics_exteventinsnavgeod,
+              false);
+        param("diagnostics/monitor/exteventinsnavcart", settings_.diagnostics_exteventinsnavcart,
+              false);
+        param("diagnostics/monitor/extsensormeas", settings_.diagnostics_extsensormeas, false);
+        param("diagnostics/monitor/imu", settings_.diagnostics_imu, false);
+        param("diagnostics/monitor/localization", settings_.diagnostics_localization, false);
+        param("diagnostics/monitor/localization_ecef", settings_.diagnostics_localization_ecef,
+              false);
+        param("diagnostics/monitor/twist", settings_.diagnostics_twist, false);
+
         if (settings_.publish_tf && settings_.publish_tf_ecef)
         {
             this->log(

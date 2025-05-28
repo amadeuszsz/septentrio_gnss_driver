@@ -197,12 +197,20 @@ septentrio_gnss_driver:
     # topic rate diagnostics
     diagnostics:
       rate_bound_status:
-        relative_frequency_ok:
-          min: 0.95
-          max: 1.05
-        relative_frequency_warn:
-          min: 0.9
-          max: 1.1
+        pvt:
+          frequency_ok:
+            min_hz: 9.5
+            max_hz: 10.5
+          frequency_warn:
+            min_hz: 9.0
+            max_hz: 11.0
+        rest:
+          frequency_ok:
+            min_hz: 1.5
+            max_hz: 2.5
+          frequency_warn:
+            min_hz: 1.0
+            max_hz: 3.0
     monitor_topics:
       # For both GNSS and INS Rxs
       navsatfix: false

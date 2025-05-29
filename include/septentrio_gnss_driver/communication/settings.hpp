@@ -332,22 +332,22 @@ struct Settings
     bool publish_tf;
     //! Whether or not to publish the tf of the localization
     bool publish_tf_ecef;
-    //! Minimum frequency the ok rate bound status for pvt
-    double monitor_pvt_frequency_ok_min;
-    //! Maximum frequency the ok rate bound status for pvt
-    double monitor_pvt_frequency_ok_max;
-    //! Minimum frequency the warn rate bound status for pvt
-    double monitor_pvt_frequency_warn_min;
-    //! Maximum frequency the warn rate bound status for pvt
-    double monitor_pvt_frequency_warn_max;
-    //! Minimum frequency the ok rate bound status for rest
-    double monitor_rest_frequency_ok_min;
-    //! Maximum frequency the ok rate bound status for rest
-    double monitor_rest_frequency_ok_max;
-    //! Minimum frequency the warn rate bound status for rest
-    double monitor_rest_frequency_warn_min;
-    //! Maximum frequency the warn rate bound status for rest
-    double monitor_rest_frequency_warn_max;
+    //! Minimum period [ms] of the ok rate bound status for pvt topics
+    double monitor_pvt_period_ok_min_ms;
+    //! Maximum period [ms] of the ok rate bound status for pvt topics
+    double monitor_pvt_period_ok_max_ms;
+    //! Minimum period [ms] of the warn rate bound status for pvt topics
+    double monitor_pvt_period_warn_min_ms;
+    //! Maximum period [ms] of the warn rate bound status for pvt topics
+    double monitor_pvt_period_warn_max_ms;
+    //! Minimum period [ms] of the ok rate bound status for rest topics
+    double monitor_rest_period_ok_min_ms;
+    //! Maximum period [ms] of the ok rate bound status for rest topics
+    double monitor_rest_period_ok_max_ms;
+    //! Minimum period [ms] of the warn rate bound status for rest topics
+    double monitor_rest_period_warn_min_ms;
+    //! Maximum period [ms] of the warn rate bound status for rest topics
+    double monitor_rest_period_warn_max_ms;
     //! Whether or not to monitor topic rate of the GGA message
     bool monitor_gpgga;
     //! Whether or not to monitor topic rate of the RMC message

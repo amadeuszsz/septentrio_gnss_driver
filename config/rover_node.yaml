@@ -198,19 +198,19 @@ septentrio_gnss_driver:
     diagnostics:
       rate_bound_status:
         pvt:
-          frequency_ok:
-            min_hz: 9.5
-            max_hz: 10.5
-          frequency_warn:
-            min_hz: 9.0
-            max_hz: 11.0
+          period_ok:
+            min_ms: 80
+            max_ms: 120
+          period_warn:
+            min_ms: 50
+            max_ms: 150
         rest:
-          frequency_ok:
-            min_hz: 1.5
-            max_hz: 2.5
-          frequency_warn:
-            min_hz: 1.0
-            max_hz: 3.0
+          period_ok:
+            min_ms: 450
+            max_ms: 550
+          period_warn:
+            min_ms: 400
+            max_ms: 600
     monitor_topics:
       # For both GNSS and INS Rxs
       navsatfix: false

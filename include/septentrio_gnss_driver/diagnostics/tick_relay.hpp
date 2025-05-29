@@ -69,19 +69,21 @@ namespace custom_diagnostic_tasks {
             rest_diagnostics_updater_->setPeriod(settings_->polling_period_rest);
             rest_diagnostics_updater_->setHardwareID(settings_->frame_id);
 
+            auto ms_to_hz = [](double ms) { return 1000.0 / ms; };
+
             auto pvt_ok_params =
-                RateBoundStatusParam{settings_->monitor_pvt_frequency_ok_min,
-                                     settings_->monitor_pvt_frequency_ok_max};
+                RateBoundStatusParam{ms_to_hz(settings_->monitor_pvt_period_ok_min_ms),
+                                     ms_to_hz(settings_->monitor_pvt_period_ok_max_ms)};
             auto pvt_warn_params =
-                RateBoundStatusParam{settings_->monitor_pvt_frequency_warn_min,
-                                     settings_->monitor_pvt_frequency_warn_max};
+                RateBoundStatusParam{ms_to_hz(settings_->monitor_pvt_period_warn_min_ms),
+                                     ms_to_hz(settings_->monitor_pvt_period_warn_max_ms)};
 
             auto rest_ok_params =
-                RateBoundStatusParam{settings_->monitor_rest_frequency_ok_min,
-                                     settings_->monitor_rest_frequency_ok_max};
+                RateBoundStatusParam{ms_to_hz(settings_->monitor_rest_period_ok_min_ms),
+                                     ms_to_hz(settings_->monitor_rest_period_ok_max_ms)};
             auto rest_warn_params =
-                RateBoundStatusParam{settings_->monitor_rest_frequency_warn_min,
-                                     settings_->monitor_rest_frequency_warn_max};
+                RateBoundStatusParam{ms_to_hz(settings_->monitor_rest_period_warn_min_ms),
+                                     ms_to_hz(settings_->monitor_rest_period_warn_max_ms)};
 
             if (settings_->monitor_gpst)
                 update_map(rest_diagnostics_updater_, "gpst", rest_ok_params,

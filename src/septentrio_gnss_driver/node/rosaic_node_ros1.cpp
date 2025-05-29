@@ -218,14 +218,14 @@ namespace rosaic_node {
         param("publish/tf_ecef", settings_.publish_tf_ecef, false);
 
         // Diagnostics parameters
-        param("diagnostics/rate_bound_status/pvt/frequency_ok/min_hz", settings_.monitor_pvt_frequency_ok_min, 0.0);
-        param("diagnostics/rate_bound_status/pvt/frequency_ok/max_hz", settings_.monitor_pvt_frequency_ok_max, 0.0);
-        param("diagnostics/rate_bound_status/pvt/frequency_warn/min_hz", settings_.monitor_pvt_frequency_warn_min, 0.0);
-        param("diagnostics/rate_bound_status/pvt/frequency_warn/max_hz", settings_.monitor_pvt_frequency_warn_max, 0.0);
-        param("diagnostics/rate_bound_status/rest/frequency_ok/min_hz", settings_.monitor_rest_frequency_ok_min, 0.0);
-        param("diagnostics/rate_bound_status/rest/frequency_ok/max_hz", settings_.monitor_rest_frequency_ok_max, 0.0);
-        param("diagnostics/rate_bound_status/rest/frequency_warn/min_hz", settings_.monitor_rest_frequency_warn_min, 0.0);
-        param("diagnostics/rate_bound_status/rest/frequency_warn/max_hz", settings_.monitor_rest_frequency_warn_max, 0.0);
+        param("diagnostics/rate_bound_status/pvt/period_ok/min_ms", settings_.monitor_pvt_period_ok_min_ms, 0.0);
+        param("diagnostics/rate_bound_status/pvt/period_ok/max_ms", settings_.monitor_pvt_period_ok_max_ms, 0.0);
+        param("diagnostics/rate_bound_status/pvt/period_warn/min_ms", settings_.monitor_pvt_period_warn_min_ms, 0.0);
+        param("diagnostics/rate_bound_status/pvt/period_warn/max_ms", settings_.monitor_pvt_period_warn_max_ms, 0.0);
+        param("diagnostics/rate_bound_status/rest/period_ok/min_ms", settings_.monitor_rest_period_ok_min_ms, 0.0);
+        param("diagnostics/rate_bound_status/rest/period_ok/max_ms", settings_.monitor_rest_period_ok_max_ms, 0.0);
+        param("diagnostics/rate_bound_status/rest/period_warn/min_ms", settings_.monitor_rest_period_warn_min_ms, 0.0);
+        param("diagnostics/rate_bound_status/rest/period_warn/max_ms", settings_.monitor_rest_period_warn_max_ms, 0.0);
         param("diagnostics/monitor/gpst", settings_.diagnostics_gpst, false);
         param("diagnostics/monitor/navsatfix", settings_.diagnostics_navsatfix, false);
         param("diagnostics/monitor/gpsfix", settings_.diagnostics_gpsfix, false);

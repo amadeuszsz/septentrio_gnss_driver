@@ -32,6 +32,7 @@
 
 #include "septentrio_gnss_driver/abstraction/typedefs.hpp"
 #include "septentrio_gnss_driver/communication/settings.hpp"
+#include "septentrio_gnss_driver/diagnostics/liveness_monitor.hpp"
 #include "septentrio_gnss_driver/diagnostics/rate_bound_status.hpp"
 
 #include <diagnostic_msgs/msg/diagnostic_status.hpp>
@@ -48,7 +49,7 @@ namespace custom_diagnostic_tasks {
     public:
         TickRelay(ROSaicNodeBase* node) : node_(node), settings_(node->settings()) {}
 
-        void tick(const std::string& topic)
+        void tick_topic(const std::string& topic)
         {
             std::call_once(initialized_, [this]() { initialize(); });
             auto it = rate_bound_status_map_.find(topic);
@@ -56,34 +57,59 @@ namespace custom_diagnostic_tasks {
                 it->second->tick();
         }
 
+        void tick_liveness()
+        {
+            std::call_once(initialized_, [this]() { initialize(); });
+            liveness_monitor_->tick();
+        }
+
     private:
         void initialize()
         {
+            auto ms_to_s = [](double ms) { return ms / 1000.0; };
+            auto ms_to_hz = [](double ms) { return 1000.0 / ms; };
+
+            liveness_diagnostics_updater_ =
+                std::make_unique<diagnostic_updater::Updater>(node_);
+            const auto liveness_period =
+                ms_to_s(std::max(settings_->polling_period_rest,
+                                 settings_->polling_period_pvt) *
+                        2);
+            liveness_diagnostics_updater_->setPeriod(liveness_period);
+            liveness_diagnostics_updater_->setHardwareID(settings_->frame_id);
+
+            liveness_monitor_ =
+                std::make_unique<custom_diagnostic_tasks::LivenessMonitor>(
+                    "Liveness", node_,
+                    rclcpp::Duration::from_seconds(liveness_period));
+            liveness_diagnostics_updater_->add(*liveness_monitor_);
+            liveness_diagnostics_updater_->force_update();
+
             pvt_diagnostics_updater_ =
                 std::make_unique<diagnostic_updater::Updater>(node_);
-            pvt_diagnostics_updater_->setPeriod(settings_->polling_period_pvt);
+            pvt_diagnostics_updater_->setPeriod(
+                ms_to_s(settings_->polling_period_pvt));
             pvt_diagnostics_updater_->setHardwareID(settings_->frame_id);
 
             rest_diagnostics_updater_ =
                 std::make_unique<diagnostic_updater::Updater>(node_);
-            rest_diagnostics_updater_->setPeriod(settings_->polling_period_rest);
+            rest_diagnostics_updater_->setPeriod(
+                ms_to_s(settings_->polling_period_rest));
             rest_diagnostics_updater_->setHardwareID(settings_->frame_id);
 
-            auto ms_to_hz = [](double ms) { return 1000.0 / ms; };
+            auto pvt_ok_params = RateBoundStatusParam{
+                ms_to_hz(settings_->monitor_pvt_period_ok_min_ms),
+                ms_to_hz(settings_->monitor_pvt_period_ok_max_ms)};
+            auto pvt_warn_params = RateBoundStatusParam{
+                ms_to_hz(settings_->monitor_pvt_period_warn_min_ms),
+                ms_to_hz(settings_->monitor_pvt_period_warn_max_ms)};
 
-            auto pvt_ok_params =
-                RateBoundStatusParam{ms_to_hz(settings_->monitor_pvt_period_ok_min_ms),
-                                     ms_to_hz(settings_->monitor_pvt_period_ok_max_ms)};
-            auto pvt_warn_params =
-                RateBoundStatusParam{ms_to_hz(settings_->monitor_pvt_period_warn_min_ms),
-                                     ms_to_hz(settings_->monitor_pvt_period_warn_max_ms)};
-
-            auto rest_ok_params =
-                RateBoundStatusParam{ms_to_hz(settings_->monitor_rest_period_ok_min_ms),
-                                     ms_to_hz(settings_->monitor_rest_period_ok_max_ms)};
-            auto rest_warn_params =
-                RateBoundStatusParam{ms_to_hz(settings_->monitor_rest_period_warn_min_ms),
-                                     ms_to_hz(settings_->monitor_rest_period_warn_max_ms)};
+            auto rest_ok_params = RateBoundStatusParam{
+                ms_to_hz(settings_->monitor_rest_period_ok_min_ms),
+                ms_to_hz(settings_->monitor_rest_period_ok_max_ms)};
+            auto rest_warn_params = RateBoundStatusParam{
+                ms_to_hz(settings_->monitor_rest_period_warn_min_ms),
+                ms_to_hz(settings_->monitor_rest_period_warn_max_ms)};
 
             if (settings_->monitor_gpst)
                 update_map(rest_diagnostics_updater_, "gpst", rest_ok_params,
@@ -200,9 +226,11 @@ namespace custom_diagnostic_tasks {
         std::once_flag initialized_;
         std::unique_ptr<diagnostic_updater::Updater> pvt_diagnostics_updater_;
         std::unique_ptr<diagnostic_updater::Updater> rest_diagnostics_updater_;
+        std::unique_ptr<diagnostic_updater::Updater> liveness_diagnostics_updater_;
         std::unordered_map<std::string,
                            std::unique_ptr<custom_diagnostic_tasks::RateBoundStatus>>
             rate_bound_status_map_;
+        std::unique_ptr<custom_diagnostic_tasks::LivenessMonitor> liveness_monitor_;
     };
 
 } // namespace custom_diagnostic_tasks

@@ -2125,7 +2125,7 @@ namespace io {
                 wait(timestampFromRos(msg.header.stamp));
             }
             node_->publishMessage<M>(topic, msg);
-            tick_relay_->tick(topic);
+            tick_relay_->tick_topic(topic);
         } else
         {
             node_->log(
@@ -2172,7 +2172,7 @@ namespace io {
 
     void MessageHandler::parseSbf(const std::shared_ptr<Telegram>& telegram)
     {
-
+        tick_relay_->tick_liveness();
         uint16_t sbfId = parsing_utilities::getId(telegram->message);
 
         /*node_->log(log_level::DEBUG, "ROSaic reading SBF block " +
@@ -2732,6 +2732,7 @@ namespace io {
 
     void MessageHandler::parseNmea(const std::shared_ptr<Telegram>& telegram)
     {
+        tick_relay_->tick_liveness();
         std::string message(telegram->message.begin(), telegram->message.end());
         /*node_->log(
           LogLevel::DEBUG,

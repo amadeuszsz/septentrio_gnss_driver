@@ -223,6 +223,8 @@ namespace rosaic_node {
         param("publish.tf_ecef", settings_.publish_tf_ecef, false);
 
         // Diagnostics parameters
+        bool use_fqn; // dummy unused variable
+        param("diagnostic_updater.use_fqn", use_fqn, true);  // read by diagnostic_updater
         getUint32Param("diagnostics.rate_bound_status.pvt.period_ok.min_ms", settings_.monitor_pvt_period_ok_min_ms, 0);
         getUint32Param("diagnostics.rate_bound_status.pvt.period_ok.max_ms", settings_.monitor_pvt_period_ok_max_ms, 0);
         getUint32Param("diagnostics.rate_bound_status.pvt.period_warn.min_ms", settings_.monitor_pvt_period_warn_min_ms, 0);

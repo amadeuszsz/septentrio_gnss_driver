@@ -66,15 +66,19 @@ namespace custom_diagnostic_tasks {
     private:
         void initialize()
         {
-            auto ms_to_s = [](double ms) { return ms / 1000.0; };
-            auto ms_to_hz = [](double ms) { return 1000.0 / ms; };
+            auto ms_to_s = [](uint32_t ms) {
+                return static_cast<double>(ms) / 1000.0;
+            };
+            auto ms_to_hz = [](uint32_t ms) {
+                return 1000.0 / static_cast<double>(ms);
+            };
 
             liveness_diagnostics_updater_ =
                 std::make_unique<diagnostic_updater::Updater>(node_);
             const auto liveness_period =
                 ms_to_s(std::max(settings_->polling_period_rest,
                                  settings_->polling_period_pvt) *
-                        2);
+                        2.0);
             liveness_diagnostics_updater_->setPeriod(liveness_period);
             liveness_diagnostics_updater_->setHardwareID(settings_->frame_id);
 
@@ -98,18 +102,18 @@ namespace custom_diagnostic_tasks {
             rest_diagnostics_updater_->setHardwareID(settings_->frame_id);
 
             auto pvt_ok_params = RateBoundStatusParam{
-                ms_to_hz(settings_->monitor_pvt_period_ok_min_ms),
-                ms_to_hz(settings_->monitor_pvt_period_ok_max_ms)};
+                ms_to_hz(settings_->monitor_pvt_period_ok_max_ms),
+                ms_to_hz(settings_->monitor_pvt_period_ok_min_ms)};
             auto pvt_warn_params = RateBoundStatusParam{
-                ms_to_hz(settings_->monitor_pvt_period_warn_min_ms),
-                ms_to_hz(settings_->monitor_pvt_period_warn_max_ms)};
+                ms_to_hz(settings_->monitor_pvt_period_warn_max_ms),
+                ms_to_hz(settings_->monitor_pvt_period_warn_min_ms)};
 
             auto rest_ok_params = RateBoundStatusParam{
-                ms_to_hz(settings_->monitor_rest_period_ok_min_ms),
-                ms_to_hz(settings_->monitor_rest_period_ok_max_ms)};
+                ms_to_hz(settings_->monitor_rest_period_ok_max_ms),
+                ms_to_hz(settings_->monitor_rest_period_ok_min_ms)};
             auto rest_warn_params = RateBoundStatusParam{
-                ms_to_hz(settings_->monitor_rest_period_warn_min_ms),
-                ms_to_hz(settings_->monitor_rest_period_warn_max_ms)};
+                ms_to_hz(settings_->monitor_rest_period_warn_max_ms),
+                ms_to_hz(settings_->monitor_rest_period_warn_min_ms)};
 
             if (settings_->monitor_gpst)
                 update_map(rest_diagnostics_updater_, "gpst", rest_ok_params,

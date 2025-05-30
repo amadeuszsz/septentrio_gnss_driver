@@ -51,6 +51,8 @@ namespace custom_diagnostic_tasks {
 
         void tick_topic(const std::string& topic)
         {
+            if (!settings_->publish_diagnostics)
+                return;
             std::call_once(initialized_, [this]() { initialize(); });
             auto it = rate_bound_status_map_.find(topic);
             if (it != rate_bound_status_map_.end())
@@ -59,6 +61,8 @@ namespace custom_diagnostic_tasks {
 
         void tick_liveness()
         {
+            if (!settings_->publish_diagnostics)
+                return;
             std::call_once(initialized_, [this]() { initialize(); });
             liveness_monitor_->tick();
         }
